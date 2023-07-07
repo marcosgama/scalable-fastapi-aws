@@ -85,6 +85,3 @@ jobs:
             ${{ env.IMAGE }}:latest
       - name: Pytest
         run: docker exec scalable-fastapi-aws poetry pytest --cov=./ --cov-report=xml tests/unit tests/integration
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env: CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
