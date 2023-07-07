@@ -57,10 +57,10 @@ jobs:
         --file ./ci_cd/python/Dockerfile \
         "."
     - name: Pytest
-      run: docker exec fastapi-tdd python -m pytest .
+      run: docker exec scalable-fastapi-aws python -m pytest .
     - name: Flake8
-      run: docker exec fastapi-tdd python -m flake8 .
+      run: docker exec scalable-fastapi-aws python -m flake8 .
     - name: Black
-      run: docker exec fastapi-tdd python -m black . --check
+      run: docker exec scalable-fastapi-aws python -m black . --check
     - name: isort
-      run: docker exec fastapi-tdd python -m isort . --check-only
+      run: docker exec scalable-fastapi-aws python -m isort . --check-only
