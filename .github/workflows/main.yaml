@@ -56,6 +56,11 @@ jobs:
         --tag ${{ env.IMAGE }}:latest \
         --file ./ci_cd/python/Dockerfile \
         "."
+    - name: Run container
+      run: |
+          docker run
+          --name scalable-fastapi-aws \
+          uvicorn web_app.main:app
     - name: Pytest
       run: docker exec scalable-fastapi-aws python -m pytest .
     - name: Flake8
