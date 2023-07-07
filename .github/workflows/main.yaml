@@ -3,7 +3,7 @@ name: Continuous Integration Pipeline
 on: [push]
 
 env:
-  IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]')/scalable-fastapi-aws
+  IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]')
 
 jobs:
 
