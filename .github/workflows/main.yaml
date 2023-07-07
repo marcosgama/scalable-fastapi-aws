@@ -3,30 +3,32 @@ name: Continuous Integration and Delivery
 on: [push]
 
 env:
-    IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]')/scalable-fastapi-aws
+  IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]')/scalable-fastapi-aws
 
-build:
+jobs:
+
+  build:
     name: Build Docker Image
     runs-on: ubuntu-latest
     steps:
-        - name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
         with:
-            ref: main
-        - name: Log in to GitHub Packages
+          ref: main
+      - name: Log in to GitHub Packages
         run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: Pull image
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull image
         run: |
-            docker pull ${{ env.IMAGE }}:latest || true
-        - name: Build image
+          docker pull ${{ env.IMAGE }}:latest || true
+      - name: Build image
         run: |
-            docker build \
+          docker build \
             --cache-from ${{ env.IMAGE }}:latest \
             --tag ${{ env.IMAGE }}:latest \
-            --file ./project/Dockerfile.prod \
-            "./project"
-        - name: Push image
+            --file ./ci_cd/python/Dockerfile \
+            "."
+      - name: Push image
         run: |
-            docker push ${{ env.IMAGE }}:latest
+          docker push ${{ env.IMAGE }}:latest
