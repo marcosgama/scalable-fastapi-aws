@@ -58,14 +58,18 @@ jobs:
         "."
     - name: Run container
       run: |
-          docker run
+          docker run \
+          - d \
           --name scalable-fastapi-aws \
-          uvicorn web_app.main:app
+          ${{ env.IMAGE }}:latest
     - name: Pytest
-      run: docker exec scalable-fastapi-aws python -m pytest .
+      run: docker exec scalable-fastapi-aws poetry pytest --cov=./ --cov-report=xml tests/unit tests/integration
     - name: Flake8
-      run: docker exec scalable-fastapi-aws python -m flake8 .
+      run: docker exec scalable-fastapi-aws poetry flake8 .
     - name: Black
-      run: docker exec scalable-fastapi-aws python -m black . --check
+      run: docker exec scalable-fastapi-aws poetry black . --check
     - name: isort
-      run: docker exec scalable-fastapi-aws python -m isort . --check-only
+      run: docker exec scalable-fastapi-aws poetry isort . --check-only --profile black
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+        env: CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
